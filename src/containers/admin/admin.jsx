@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Switch, Route, Redirect} from 'react-router-dom'
 import { Layout } from 'antd';
 import { createDeleteUserInfoAction } from '../../redux/actions/login'
-import { reqCategoryList } from '../../api/index'
 import Header from './header/header.jsx'
 import LeftNav from './left_nav/left_nav'
 import Bar from '../bar/bar'
@@ -19,10 +18,6 @@ const { Footer, Sider, Content } = Layout;
 class Admin extends Component {
   handleLogOut = () => {
     this.props.deleteUserInfo(createDeleteUserInfoAction())
-  }
-  handleGetCategory = async () => {
-    const result = await reqCategoryList()
-    console.log(result);
   }
   render() {
     const { isLogin } = this.props.userInfo
@@ -40,16 +35,16 @@ class Admin extends Component {
                <Route component={ Category } path="/admin/product_about/category" ></Route>
                <Route component={ Role } path="/admin/role" ></Route>
                <Route component={ User } path="/admin/user" ></Route>
-               <Route component={ Pie } path="/admin/pie" ></Route>
-               <Route component={ Line } path="/admin/line" ></Route>
-               <Route component={ Bar } path="/admin/bar" ></Route>
+               <Route component={ Pie } path="/admin/charts/pie" ></Route>
+               <Route component={ Line } path="/admin/charts/line" ></Route>
+               <Route component={ Bar } path="/admin/charts/bar" ></Route>
                <Route component={ Product } path="/admin/product_about/product" ></Route>
                <Redirect to="/admin/home" ></Redirect>
               </Switch>
             </Content>
             <Footer>
               It is recommended to use Google or Firefox browser for better experience
-              <button onClick={this.handleGetCategory} >test</button>
+              <button >test</button>
             </Footer>
           </Layout>
         </Layout>

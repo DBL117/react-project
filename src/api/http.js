@@ -33,6 +33,10 @@ http.interceptors.response.use(
   },
   error => {
     Nprogress.done()
+    if(!error.response){
+      message.error('请联系管理员', 1)
+      return
+    }
     // 加入用户的token过期 或者 用户的修改了token 后台返回状态码是401
     if (error.response.status === 401) {
       message.error('身份校验已过期 请重新登录', 1)

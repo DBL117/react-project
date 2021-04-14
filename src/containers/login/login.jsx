@@ -16,7 +16,7 @@ class Login extends Component {
       if (status === 0) {
         this.props.saveUserInfo(data)
         message.success('Login Success', 1)
-        this.props.history.push('/admin')
+        this.props.history.push('/admin/home')
       } else {
         message.warn('用户名或密码错误', 1)
       }
@@ -94,7 +94,7 @@ class Login extends Component {
         </div>
       )
     } else {
-      return <Redirect to="/admin" />
+      return <Redirect to="/admin/home" />
     }
   }
 }

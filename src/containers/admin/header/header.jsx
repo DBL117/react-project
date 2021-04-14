@@ -8,11 +8,13 @@ import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { createDeleteUserInfoAction } from '../../../redux/actions/login'
 import { reqWeather } from '../../../api/index'
 import './css/header.less'
+import menuList from '../../../config/menu-config'
 class Header extends Component {
   state = {
     isFull: false,
     date: dayjs().format('YYYY年 MM月-DD日 HH:MM:ss'),
-    weather: {}
+    weather: {},
+    title: ''
   }
   // Logout callback
   handleLogout = () => {
@@ -36,12 +38,31 @@ class Header extends Component {
     const temperature = result.data.result.daily.temperature[0]
     const skycon = result.data.result.daily.skycon[0]
     this.setState({
-      weather:{
+      weather: {
         min: temperature.min,
         max: temperature.max,
         skycon: skycon.value
       }
     })
+  }
+  // 通过路由pathname来匹配title的显示
+  getTitle = () => {
+    // 此方法不能直接让在视图中调用 页面中有一个时间在不断地刷新 会让render不断执行 导致该方法也不断地执行（影响效率） 所以存到状态中 但是存到状态中 header不会随着main组件中的更新而改变 也不行 所以存到redux中 两个组件之间互用（在left_nav中存）
+    const pathKey = this.props.location.pathname.split('/').reverse()[0]
+    let title = ''
+    menuList.forEach(item => {
+      if (item.children instanceof Array) {
+        let result = item.children.find(item2 => {
+          return item2.key.split('/').reverse()[0] === pathKey
+        })
+        if(result) title = result.title
+      } else {
+        if (pathKey === item.key.split('/').reverse()[0]) {
+          title = item.title
+        }
+      }
+    })
+    this.setState({title})
   }
   componentDidMount() {
     // 监听全屏的change事件
@@ -56,8 +77,9 @@ class Header extends Component {
       })
     }, 1000)
     this.getWeather()
+    this.getTitle()
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.timer)
   }
   render() {
@@ -75,25 +97,25 @@ class Header extends Component {
         </div>
         <div className="header-bottom">
           <div className="bottom-left">
-            { this.props.location.pathname }
+            { this.props.title || this.state.title}
           </div>
           <div className="bottom-right">
-            { this.state.date }
-            <img src = {
-              skycon === 'PARTLY_CLOUDY_DAY' ? baseImgUrl + 'yin.png':
-              skycon === 'LIGHT_RAIN' ? baseImgUrl + 'xiaoyu.png' :
-              skycon === 'MODERATE_RAIN' ? baseImgUrl + 'zhongyu.png' :
-              skycon === 'CLEAR_DAY' ? baseImgUrl + 'qing.png' :
-              skycon === 'HEAVY_RAIN' ? baseImgUrl + 'dayu.png' :
-              skycon === 'CLOUDY' ? baseImgUrl + 'duoyun.png' : 'yin.png'
+            {this.state.date}
+            <img src={
+              skycon === 'PARTLY_CLOUDY_DAY' ? baseImgUrl + 'yin.png' :
+                skycon === 'LIGHT_RAIN' ? baseImgUrl + 'xiaoyu.png' :
+                  skycon === 'MODERATE_RAIN' ? baseImgUrl + 'zhongyu.png' :
+                    skycon === 'CLEAR_DAY' ? baseImgUrl + 'qing.png' :
+                      skycon === 'HEAVY_RAIN' ? baseImgUrl + 'dayu.png' :
+                        skycon === 'CLOUDY' ? baseImgUrl + 'duoyun.png' : 'yin.png'
             } alt="天气信息" />
-            { skycon === 'PARTLY_CLOUDY_DAY' ? '部分阴天':
+            {skycon === 'PARTLY_CLOUDY_DAY' ? '部分阴天' :
               skycon === 'CLOUDY' ? '多云' :
-              skycon === 'LIGHT_RAIN' ? '小雨' :
-              skycon === 'MODERATE_RAIN' ? '中雨' :
-              skycon === 'CLEAR_DAY' ? '晴天' :
-              skycon === 'HEAVY_RAIN' ? '大雨' : '未知'}
-            温度 { min } ~ { max } 度
+                skycon === 'LIGHT_RAIN' ? '小雨' :
+                  skycon === 'MODERATE_RAIN' ? '中雨' :
+                    skycon === 'CLEAR_DAY' ? '晴天' :
+                      skycon === 'HEAVY_RAIN' ? '大雨' : '未知'}
+            温度 {min} ~ {max} 度
           </div>
         </div>
       </header>
@@ -102,7 +124,7 @@ class Header extends Component {
 }
 
 export default connect(
-  state => ({ userInfo: state.userInfo }),
+  state => ({ userInfo: state.userInfo, title: state.title }),
   {
     deleteUserInfo: createDeleteUserInfoAction
   }

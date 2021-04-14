@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import {
-  Menu
-} from 'antd'
-import {
-  HomeOutlined,
-  WalletOutlined,
-  ToolOutlined,
-  UnorderedListOutlined
-} from '@ant-design/icons';
+import { Menu } from 'antd'
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import logo from '../../../static/imgs/logo.png'
+import { createSaveTitleAction } from '../../../redux/actions/title'
 import './left_nav.less'
+import menuList from '../../../config/menu-config'
 const { SubMenu } = Menu
 class left_nav extends Component {
+  createMenu = target => {
+    return (
+      <Menu.Item key={target.key} icon={target.icon} onClick={() => this.savaTitle(target.title)} >
+        <Link to={target.key}>{target.title}</Link>
+      </Menu.Item>
+    )
+  }
+  // 保存title到redux
+  savaTitle = title => {
+    this.props.savaTitle(title)
+  }
   render() {
     return (
       <div className="container_nav">
@@ -23,22 +30,35 @@ class left_nav extends Component {
         <Menu
           mode="inline"
           theme="light"
+          defaultSelectedKeys={ this.props.location.pathname }
+          defaultOpenKeys= {this.props.location.pathname.split('/').splice(2)}
         >
-          <Menu.Item key="1" icon={<HomeOutlined />}>
-            <Link to="/admin/home">首页</Link>
-          </Menu.Item>
-          <SubMenu key="sub2" icon={<WalletOutlined />} title="商品">
-            <Menu.Item key="9"><UnorderedListOutlined />
-              <Link to="/admin/product_about/category">分类管理</Link>
-            </Menu.Item>
-            <Menu.Item key="10"><ToolOutlined />
-              <Link to="/admin/product_about/product">商品管理</Link>
-            </Menu.Item>
-          </SubMenu>
+          {
+            menuList.map(item => {
+              if (!item.children) {
+                return this.createMenu(item)
+              } else {
+                return (
+                  <SubMenu key={item.key} icon={item.icon} title={item.title}>
+                    {
+                      item.children.map(item => {
+                        return this.createMenu(item)
+                      })
+                    }
+                  </SubMenu>
+                )
+              }
+            })
+          }
         </Menu>
       </div>
     );
   }
 }
-
-export default left_nav;
+export default connect(
+  state => ({}),
+  {
+    savaTitle: createSaveTitleAction
+  }
+)(withRouter(left_nav))
+ 
