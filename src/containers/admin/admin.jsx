@@ -9,6 +9,8 @@ import Bar from '../bar/bar'
 import Pie from '../pie/pie'
 import Line from '../line/line'
 import Product from '../product/product'
+import Detail from '../product/detail'
+import AddUpdate from '../product/add_update'
 import Role from '../role/role'
 import User from '../user/user'
 import Category from '../category/category'
@@ -38,13 +40,16 @@ class Admin extends Component {
                <Route component={ Pie } path="/admin/charts/pie" ></Route>
                <Route component={ Line } path="/admin/charts/line" ></Route>
                <Route component={ Bar } path="/admin/charts/bar" ></Route>
-               <Route component={ Product } path="/admin/product_about/product" ></Route>
+               <Route component={ Product } path="/admin/product_about/product" exact ></Route>
+               <Route component={ Detail } path="/admin/product_about/product/detail/:id" ></Route>
+               <Route component={ AddUpdate } path="/admin/product_about/product/add_update" exact ></Route>
+               {/* 更新路由和新增路由共用一个组件  一个带id 一个不带id 不带id那个一个加上严格匹配 不然 带id的这个路由永远不会匹配上 */}
+               <Route component={ AddUpdate } path="/admin/product_about/product/add_update/:id" ></Route>
                <Redirect to="/admin/home" ></Redirect>
               </Switch>
             </Content>
             <Footer>
               It is recommended to use Google or Firefox browser for better experience
-              <button >test</button>
             </Footer>
           </Layout>
         </Layout>

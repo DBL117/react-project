@@ -21,6 +21,7 @@ class left_nav extends Component {
     this.props.savaTitle(title)
   }
   render() {
+    const {pathname} = this.props.location
     return (
       <div className="container_nav">
         <div className="div_nav">
@@ -30,8 +31,10 @@ class left_nav extends Component {
         <Menu
           mode="inline"
           theme="light"
-          defaultSelectedKeys={ this.props.location.pathname }
-          defaultOpenKeys= {this.props.location.pathname.split('/').splice(2)}
+          // 如路由中带有/product_about/product 就全部匹配到 /admin/product_about/product 没有的话再去正常匹配
+          defaultSelectedKeys={ pathname.indexOf('/product_about/product') !== -1 ? '/admin/product_about/product' : pathname }
+          // defaultSelectedKeys={ this.props.location.pathname }
+          defaultOpenKeys= { pathname.split('/').splice(2) }
         >
           {
             menuList.map(item => {
@@ -61,4 +64,3 @@ export default connect(
     savaTitle: createSaveTitleAction
   }
 )(withRouter(left_nav))
- 

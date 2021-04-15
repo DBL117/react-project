@@ -12,7 +12,7 @@ export default function testReducer(preState = initState, action) {
   const { type, data } = action
   switch (type) {
     case SAVE_USER_INFO:
-      return { user:data.user, isLogin: true, tiken: data.token }
+      return { user:data.user, isLogin: true, token: data.token }
     case DELETE_USER_INFO:
       return { user:'', isLogin: false, tiken: '' }
     default:

@@ -48,8 +48,11 @@ class Header extends Component {
   // 通过路由pathname来匹配title的显示
   getTitle = () => {
     // 此方法不能直接让在视图中调用 页面中有一个时间在不断地刷新 会让render不断执行 导致该方法也不断地执行（影响效率） 所以存到状态中 但是存到状态中 header不会随着main组件中的更新而改变 也不行 所以存到redux中 两个组件之间互用（在left_nav中存）
-    const pathKey = this.props.location.pathname.split('/').reverse()[0]
+    const { pathname } = this.props.location
+    let pathKey = pathname.split('/').reverse()[0]
     let title = ''
+    // 如果路由包含那一段 就默认pathKey为'product'
+    if(pathname.indexOf('/product_about/product') !== -1) pathKey = 'product'
     menuList.forEach(item => {
       if (item.children instanceof Array) {
         let result = item.children.find(item2 => {
@@ -108,13 +111,15 @@ class Header extends Component {
                     skycon === 'CLEAR_DAY' ? baseImgUrl + 'qing.png' :
                       skycon === 'HEAVY_RAIN' ? baseImgUrl + 'dayu.png' :
                         skycon === 'CLOUDY' ? baseImgUrl + 'duoyun.png' : 'yin.png'
-            } alt="天气信息" />
+            } 
+            alt="天气信息" />
             {skycon === 'PARTLY_CLOUDY_DAY' ? '部分阴天' :
               skycon === 'CLOUDY' ? '多云' :
                 skycon === 'LIGHT_RAIN' ? '小雨' :
                   skycon === 'MODERATE_RAIN' ? '中雨' :
                     skycon === 'CLEAR_DAY' ? '晴天' :
-                      skycon === 'HEAVY_RAIN' ? '大雨' : '未知'}
+                      skycon === 'HEAVY_RAIN' ? '大雨' :
+                      skycon === 'PARTLY_CLOUDY_NIGHT' ? '部分多云的夜晚' : '未知天气' }
             温度 {min} ~ {max} 度
           </div>
         </div>
