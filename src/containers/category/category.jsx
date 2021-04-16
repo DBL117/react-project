@@ -21,6 +21,8 @@ class category extends Component {
   }
   // 更新分类的回调
   handleUpdataCategory = item => {
+    // 要给modal设置一个forceRender属性 致使其预加载 其中的form才能被加载 才能一点击就能使用this.refForm 未加载点击就是undefined
+    this.formRef.setFieldsValue({ categoryName: item.name })
     const { _id } = item
     this.setState({
       isModalVisible: true,
@@ -54,8 +56,6 @@ class category extends Component {
         message.warning('请输入分类名', 2)
       }
     )
-
-
   }
   // modal的cancel回调
   handleCancel = () => {
@@ -95,6 +95,7 @@ class category extends Component {
       message.error(msg, 2)
     }
   }
+  // 修改分类回调
   toUpdate = async valueObj => {
     const result = await reqUpdateCategory(valueObj)
     const { status, msg } = result
@@ -135,8 +136,8 @@ class category extends Component {
         <Card
           title='分类管理'
           extra={<Button icon={<PlusOutlined />}
-          type="primary"
-          onClick={this.handleAddCategory}>增加</Button>} >
+            type="primary"
+            onClick={this.handleAddCategory}>增加</Button>} >
           <Table
             bordered
             loading={this.isTableLoading}
@@ -145,7 +146,9 @@ class category extends Component {
             rowKey="_id"
             pagination={{ defaultPageSize: DEFAULT_PAGE_SIZE, showQuickJumper: true }} />
         </Card>
-        <Modal title={operationType === 'add' ? '新增分类' : '更新分类'}
+        <Modal 
+          forceRender 
+          title={operationType === 'add' ? '新增分类' : '更新分类'}
           visible={isModalVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}>
@@ -174,7 +177,7 @@ class category extends Component {
 }
 
 export default connect(
-  state =>({}),
+  state => ({}),
   {
     saveCategory: createSaveCategoryListAction
   }

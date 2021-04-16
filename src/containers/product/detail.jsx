@@ -94,7 +94,7 @@ class detail extends Component {
               <span className="prod-name">商品图片：</span>
               {
                 imgs.map(item => {
-                  return <Image key={item} src={BASE_URL + '/upload/' + item} alt="商品图片" />
+                  return <Image style={{ width: '150px' }} key={item} src={BASE_URL + '/upload/' + item} alt="商品图片" />
                 })
               }
             </Item>
