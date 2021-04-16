@@ -80,7 +80,7 @@ export default class PictrueWall extends Component {
           footer={null}
           onCancel={this.handleCancel}
         >
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          <img alt="上传图片" style={{ width: '100%' }} src={previewImage} />
         </Modal>
       </>
     );
