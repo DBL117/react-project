@@ -3,6 +3,8 @@ import { Card, Button, Table, message, Modal, Form, Input } from 'antd';
 import {
   PlusOutlined,
 } from '@ant-design/icons';
+import { connect } from 'react-redux'
+import { createSaveCategoryListAction } from '../../redux/actions/category'
 import { reqCategoryList } from '../../api/index'
 import { DEFAULT_PAGE_SIZE } from '../../config/index'
 import { reqAddCategory, reqUpdateCategory } from '../../api/index'
@@ -68,7 +70,11 @@ class category extends Component {
     // 改变表格loading
     this.setState({ isTableLoading: false })
     const { status, data } = result
-    if (status === 0) this.setState({ categoryList: data.reverse() })
+    if (status === 0) {
+      this.setState({ categoryList: data.reverse() })
+      // 将分类列表存入redux
+      this.props.saveCategory(data)
+    }
     else message('请求出错', 1)
   }
   // 请求添加分类
@@ -167,4 +173,9 @@ class category extends Component {
   }
 }
 
-export default category;
+export default connect(
+  state =>({}),
+  {
+    saveCategory: createSaveCategoryListAction
+  }
+)(category);

@@ -2,13 +2,12 @@ import axios from 'axios'
 import qs from 'qs'
 import Nprogress from 'nprogress'
 import { message } from 'antd'
-import { BASE_URL } from '../config/index'
 import store from '../redux/store'
 import { createDeleteUserInfoAction } from '../redux/actions/login'
 import 'nprogress/nprogress.css'
 const http = axios.create({
   timeout: 4000,
-  baseURL: BASE_URL + '/api1'
+  baseURL: '/api1'
 })
 
 http.interceptors.request.use(config => {

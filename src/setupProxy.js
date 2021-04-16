@@ -3,8 +3,8 @@ module.exports = function(app){
   // "proxy": "http://localhost:4000"
   app.use(
     proxy('/api1',{
-      target:'http://localhost:4000',
-      changeOrigin : true, // 改变请求得Host false的话 Host就是localhost:3000 true就是localhost:4000
+      target: 'http://localhost:4000',
+      changeOrigin: true, // 改变请求得Host false的话 Host就是localhost:3000 true就是localhost:4000
       pathRewrite: { '^/api1': '' } // 路径重新 让服务端拿到的路径把/api给去了
     }),
     proxy('/api2',{
