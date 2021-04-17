@@ -34,3 +34,16 @@ export const reqProductAdd = productObj => http.post('/manage/product/add', {...
 export const reqProductUpdate = (productObj) => http.post('/manage/product/update', {...productObj})
 // delete图片
 export const reqDeleteImg = name => http.post('/manage/img/delete', { name })
+
+
+// 请求所有角色
+export const reqRoleList = () => http.get('/manage/role/list')
+// 添加角色
+export const reqAddRole = roleName => http.post('/manage/role/add', {roleName})
+// 设置角色权限
+export const reqAuthRole = roleObj => http.post('/manage/role/update', {...roleObj, auth_time: Date.now()})
+
+
+// 获取用户列表
+export const reqUserList = () => http.get('/manage/user/list')
+export const reqUserAdd = userObj => http.post('/manage/user/add', userObj)

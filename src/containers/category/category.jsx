@@ -146,8 +146,8 @@ class category extends Component {
             rowKey="_id"
             pagination={{ defaultPageSize: DEFAULT_PAGE_SIZE, showQuickJumper: true }} />
         </Card>
-        <Modal 
-          forceRender 
+        <Modal
+          forceRender
           title={operationType === 'add' ? '新增分类' : '更新分类'}
           visible={isModalVisible}
           onOk={this.handleOk}
